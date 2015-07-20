@@ -1,0 +1,16 @@
+{
+  "name": "respawner",
+  "version": "0.0.0",
+  "description": "Spawns child processes on a set interval.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "spawn",
+    "interval",
+    "timer"
+  ],
+  "author": "dnjo (dennis@dnjo.net)",
+  "license": "ISC"
+}
