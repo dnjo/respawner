@@ -4,6 +4,13 @@ var child_process = require('child_process'),
     EventEmitter = require('events').EventEmitter,
     util = require('util');
 
+/**
+ * Initializes a new instance of respawner.
+ * @class
+ * @classdesc respawner spawns a child process at a set interval.
+ * @param {String} path The child process command.
+ * @param {String} args The arguments to the spawned process.
+ */
 function Respawner(path, args) {
     var that = this,
         spawning,
@@ -26,6 +33,10 @@ function Respawner(path, args) {
         });
     }
     
+    /**
+     * Starts spawning the child process.
+     * @param {Number} [interval=60000] The spawn interval in milliseconds.
+     */
     Respawner.prototype.start = function (interval) {
         interval = interval || 60000;
         spawning = true;
@@ -40,10 +51,12 @@ function Respawner(path, args) {
         }());
     };
     
+    /**
+     * Stops spawning the child process.
+     * @param {Boolean} [stopNow=true] True to stop spawning immediately, false to stop after the next spawn.
+     */
     Respawner.prototype.stop = function (stopNow) {
-        if (stopNow !== false) {
-            stopNow = true;
-        }
+        stopNow = (stopNow !== false) ? true : false;
         
         if (spawning) {
             spawning = false;
