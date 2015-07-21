@@ -12,5 +12,9 @@
     "timer"
   ],
   "author": "dnjo (dennis@dnjo.net)",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "rewire": "^2.3.4",
+    "sinon": "^1.15.4"
+  }
 }
