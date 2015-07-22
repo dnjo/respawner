@@ -4,7 +4,7 @@
   "description": "Spawns child processes on a set interval.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "node_modules/mocha/bin/mocha"
   },
   "keywords": [
     "spawn",
@@ -14,6 +14,7 @@
   "author": "dnjo (dennis@dnjo.net)",
   "license": "ISC",
   "devDependencies": {
+    "mocha": "^2.2.5",
     "rewire": "^2.3.4",
     "sinon": "^1.15.4"
   }
