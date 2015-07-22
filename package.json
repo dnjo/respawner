@@ -1,6 +1,6 @@
 {
   "name": "respawner",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Spawns child processes on a set interval.",
   "main": "index.js",
   "scripts": {
