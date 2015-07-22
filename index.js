@@ -63,6 +63,7 @@ function Respawner(path, args) {
             
             if (stopNow && spawner) {
                 clearTimeout(spawner);
+                spawner = null;
             }
         }
     };
