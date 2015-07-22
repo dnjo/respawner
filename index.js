@@ -55,15 +55,25 @@ function Respawner(path, args) {
         var output = '';
         
         process.on('error', function (err) {
+            /** 'error' event. Is emitted if the child process cannot be spawned.
+             * @event Respawner#error
+             */
             that.emit('error', err);
         });
         
         process.on('exit', function () {
+            /** 'exit' event. Is emitted when the child process exits. All concatenated data from the
+             * child process's stdout is returned.
+             * @event Respawner#exit
+             */
             that.emit('exit', output);
         });
         
         process.stdout.on('data', function (data) {
             output += data;
+            /** 'data' event. Is emitted when data is received from the child process's stdout.
+             * @event Respawner#data
+             */
             that.emit('data', data);
         });
     }
