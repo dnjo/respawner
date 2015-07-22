@@ -7,7 +7,7 @@ var child_process = require('child_process'),
 /**
  * Initializes a new instance of respawner.
  * @class
- * @classdesc respawner spawns a child process at a set interval.
+ * @classdesc Spawns a child process at a set interval.
  * @param {String} path The child process command.
  * @param {String} args The arguments to the spawned process.
  */
@@ -15,23 +15,6 @@ function Respawner(path, args) {
     var that = this,
         spawning,
         spawner;
-    
-    function handleSpawnEvents(process) {
-        var output = '';
-        
-        process.on('error', function (err) {
-            that.emit('error', err);
-        });
-        
-        process.on('exit', function () {
-            that.emit('exit', output);
-        });
-        
-        process.stdout.on('data', function (data) {
-            output += data;
-            that.emit('data', data);
-        });
-    }
     
     /**
      * Starts spawning the child process.
@@ -67,6 +50,23 @@ function Respawner(path, args) {
             }
         }
     };
+    
+    function handleSpawnEvents(process) {
+        var output = '';
+        
+        process.on('error', function (err) {
+            that.emit('error', err);
+        });
+        
+        process.on('exit', function () {
+            that.emit('exit', output);
+        });
+        
+        process.stdout.on('data', function (data) {
+            output += data;
+            that.emit('data', data);
+        });
+    }
 }
 
 util.inherits(Respawner, EventEmitter);
