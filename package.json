@@ -9,13 +9,27 @@
   "keywords": [
     "spawn",
     "interval",
-    "timer"
+    "timer",
+    "child_process",
+    "process"
   ],
-  "author": "dnjo (dennis@dnjo.net)",
+  "author": {
+    "name": "Dennis Johansson",
+    "email": "dennis@dnjo.net",
+  },
   "license": "ISC",
   "devDependencies": {
     "mocha": "^2.2.5",
     "rewire": "^2.3.4",
     "sinon": "^1.15.4"
+  },
+  "homepage": "https://github.com/dnjo/respawner",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dnjo/respawner.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dnjo/respawner/issues",
+    "email": "dennis@dnjo.net"
   }
 }
