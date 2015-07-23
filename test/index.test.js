@@ -132,6 +132,14 @@ describe('Respawner', function () {
             
             respawner.start();
         });
+        
+        it('should only start spawning a new process the first time it\'s called', function () {
+            respawner.start();
+            respawner.start();
+            
+            assert(setTimeoutStub.calledOnce, 'setTimeout was called more than once');
+        });
+            
     });
     
     describe('stop()', function () {

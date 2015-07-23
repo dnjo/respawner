@@ -21,6 +21,10 @@ function Respawner(path, args) {
      * @param {Number} [interval=60000] The spawn interval in milliseconds.
      */
     Respawner.prototype.start = function (interval) {
+        if (spawning) {
+            return;
+        }
+        
         interval = interval || 60000;
         spawning = true;
         
@@ -42,12 +46,11 @@ function Respawner(path, args) {
         stopNow = (stopNow !== false) ? true : false;
         
         if (spawning) {
-            spawning = false;
-            
             if (stopNow && spawner) {
                 clearTimeout(spawner);
             }
             
+            spawning = false;
             spawner = null;
         }
     };
