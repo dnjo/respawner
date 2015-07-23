@@ -33,6 +33,69 @@ describe('Respawner', function () {
         Respawner.__set__('clearTimeout', clearTimeoutStub);
     });
     
+    it('should emit the data returned from stdout', function (done) {
+        var testData = 'testdata';
+
+        callbackImmediately(spawnStdoutEmitter, 'data', testData);
+
+        respawner.on('data', function (data) {
+            assert.equal(data, testData, 'Incorrect data emitted');
+            done();
+        });
+
+        respawner.start();
+    });
+
+    it('should emit all stdout data when the process exits', function (done) {
+        var subscribedEvents = [],
+            emitterList,
+            testData1 = 'testdata1',
+            testData2 = 'testdata2';
+
+        function eventSubscribed(event) {
+            subscribedEvents.push(event);
+
+            // Make sure both the data and exit events have been subscribed to.
+            if (subscribedEvents.indexOf('data') != -1 && subscribedEvents.indexOf('exit') != -1) {
+                emitData();
+            }
+        }
+
+        function emitData() {
+            spawnStdoutEmitter.emit('data', testData1);
+            spawnStdoutEmitter.emit('data', testData2);
+            spawnEmitter.emit('exit');
+        }
+
+        callbackOnListener(spawnEmitter, 'exit', function () {
+            eventSubscribed('exit');
+        });
+
+        callbackOnListener(spawnStdoutEmitter, 'data', function () {
+            eventSubscribed('data');
+        });
+
+        respawner.on('exit', function (output) {
+            assert.equal(output, testData1 + testData2);
+            done();
+        });
+
+        respawner.start();
+    });
+    
+    it('should emit the correct error if the spawned process has an error', function (done) {
+        var testError = 'testerror';
+
+        callbackImmediately(spawnEmitter, 'error', testError);
+
+        respawner.on('error', function (err) {
+            assert.equal(err, testError, 'Incorrect error emitted');
+            done();
+        });
+
+        respawner.start();
+    });
+    
     describe('start()', function () {
         it('should call spawn with correct arguments', function (done) {
             callbackImmediately(spawnEmitter, 'exit');
@@ -40,56 +103,6 @@ describe('Respawner', function () {
             respawner.on('exit', function () {
                 assert.equal(processMock.spawn.args[0][0], spawnTestPath, 'Incorrect spawn path');
                 assert(arraysEqual(processMock.spawn.args[0][1], spawnTestArgs.split(' ')), 'Incorrect spawn arguments');
-                done();
-            });
-            
-            respawner.start();
-        });
-        
-        it('should emit the data returned from stdout', function (done) {
-            var testData = 'testdata';
-            
-            callbackImmediately(spawnStdoutEmitter, 'data', testData);
-            
-            respawner.on('data', function (data) {
-                assert.equal(data, testData, 'Incorrect data emitted');
-                done();
-            });
-            
-            respawner.start();
-        });
-        
-        it('should emit all stdout data when the process exits', function (done) {
-            var subscribedEvents = [],
-                emitterList,
-                testData1 = 'testdata1',
-                testData2 = 'testdata2';
-            
-            function eventSubscribed(event) {
-                subscribedEvents.push(event);
-                
-                // Make sure both the data and exit events have been subscribed to.
-                if (subscribedEvents.indexOf('data') != -1 && subscribedEvents.indexOf('exit') != -1) {
-                    emitData();
-                }
-            }
-            
-            function emitData() {
-                spawnStdoutEmitter.emit('data', testData1);
-                spawnStdoutEmitter.emit('data', testData2);
-                spawnEmitter.emit('exit');
-            }
-            
-            callbackOnListener(spawnEmitter, 'exit', function () {
-                eventSubscribed('exit');
-            });
-            
-            callbackOnListener(spawnStdoutEmitter, 'data', function () {
-                eventSubscribed('data');
-            });
-            
-            respawner.on('exit', function (output) {
-                assert.equal(output, testData1 + testData2);
                 done();
             });
             
@@ -116,19 +129,6 @@ describe('Respawner', function () {
                 done();
             };
             Respawner.__set__('setTimeout', setTimeoutStub);
-            
-            respawner.start();
-        });
-        
-        it('should emit the correct error if the spawned process has an error', function (done) {
-            var testError = 'testerror';
-            
-            callbackImmediately(spawnEmitter, 'error', testError);
-            
-            respawner.on('error', function (err) {
-                assert.equal(err, testError, 'Incorrect error emitted');
-                done();
-            });
             
             respawner.start();
         });
